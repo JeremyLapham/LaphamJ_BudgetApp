@@ -29,6 +29,18 @@
         justify-content: center;
     }
 
+    .expenssesBox {
+        display: grid;
+        height:150px;
+        width:300px;
+        overflow: scroll;
+        border: 2px solid;
+    }
+
+    .hide {
+        display: none;
+    }
+
 
 
 

@@ -1,3 +1,4 @@
+import { CreateExpense } from "./app.js";
 function saveToLocalStorage(amount) {
     let sameExpense = false;
     let money = getLocalStoage();
@@ -5,7 +6,8 @@ function saveToLocalStorage(amount) {
     for(let i = 0; i<money.length; i++){
         if(money[i].budget==amount.budget&&
             money[i].expensename==amount.expensename&&
-            money[i].expenseprice==amount.expenseprice) {
+            money[i].expenseprice==amount.expenseprice&&
+            money[i].totalbudget==amount.totalbudget) {
                 sameExpense = true;
             }
     }
@@ -16,17 +18,6 @@ function saveToLocalStorage(amount) {
         localStorage.setItem('Money', JSON.stringify(money));
         CreateExpense()
     }
-}
-
-function CreateExpense() {
-    let row = document.createElement('row');
-    let h4 = document.createElement('h4');
-    h4.className = 'expenseDisplay';
-    h4.id = 'expenseNameAndPrice';
-    h4.textContent = `Expense: ${expenseName.value} \n Price: $${expensePrice.value}`;
-
-    row.appendChild(h4);
-    whereExpense.appendChild(row);
 }
 
 function getLocalStoage() {
@@ -41,10 +32,19 @@ function getLocalStoage() {
 
 function removeFromLocalStorage(amount) {
     let money = getLocalStoage();
-    let moneyIndex = money.indexOf(amount);
+    let moneyIndex = 0;
+
+    for(let i = 0; i<money.length; i++){
+        if(money[i].budget==amount.budget&&
+            money[i].expensename==amount.expensename&&
+            money[i].expenseprice==amount.expenseprice&&
+            money[i].totalbudget==amount.totalbudget) {
+                moneyIndex = i;
+            }
+    }
 
     money.splice(moneyIndex,1);
     localStorage.setItem('Money', JSON.stringify(money));
 }
 
-export { saveToLocalStorage, getLocalStoage, removeFromLocalStorage, CreateExpense }
+export { saveToLocalStorage, getLocalStoage, removeFromLocalStorage }
