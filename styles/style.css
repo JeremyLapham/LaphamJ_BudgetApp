@@ -1,3 +1,6 @@
+body{
+    display:none;
+}
 @media screen and (max-width: 426px) and (min-width: 320px) {
 
     body {
@@ -5,6 +8,7 @@
         background-image:
             linear-gradient(to right,
                 rgba(0, 0, 0, 0), #c64d44);
+                display: block;
     }
 
     .titleTXT {
@@ -31,6 +35,7 @@
 
     .expenssesBox {
         display: grid;
+        justify-content: center;
         height:150px;
         width:300px;
         overflow: scroll;
@@ -40,44 +45,4 @@
     .hide {
         display: none;
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
