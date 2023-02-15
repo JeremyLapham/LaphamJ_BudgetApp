@@ -9,6 +9,7 @@ const expenseName = document.getElementById('expenseName');
 const submitExpenseBtn = document.getElementById('submitExpenseBtn');
 const whereExpense = document.getElementById('whereExpense');
 const placeHold = document.getElementById('placeHold');
+const resetBtn = document.getElementById('resetBtn');
 
 submitBtn.addEventListener('click', function () {
     if (budgetNum.value == '') {
@@ -22,10 +23,9 @@ submitBtn.addEventListener('click', function () {
 
 submitExpenseBtn.addEventListener('click', function () {
     let letters = /^[A-Za-z-]+$/;
-    if (expenseName.value == '' || expensePrice.value == ''|| !expenseName.value.match(letters)) {
+    if (expenseName.value == '' || expensePrice.value == '' || !expenseName.value.match(letters)) {
         alert('Please input something to the input fields or make sure you put letters into the name')
     } else {
-
         let saveMoney = {
             budget: budgetNum.value,
             expensename: expenseName.value.charAt(0).toUpperCase() + expenseName.value.slice(1),
@@ -36,13 +36,21 @@ submitExpenseBtn.addEventListener('click', function () {
     }
 });
 
+resetBtn.addEventListener('click', function () {
+    let initialBudget = parseFloat(getLocalStoage()[0].budget);
+    placeHold.textContent = `Remaining budget: $${initialBudget}`;
+    localStorage.clear();
+    whereExpense.innerHTML = '';
+    CreateExpense()
+});
+
 function CreateExpense() {
     whereExpense.innerHTML = '';
-
     let moneys = getLocalStoage();
 
     moneys.forEach(money => {
         moneyTxt.textContent = 'Your budget is $' + money.budget;
+        budgetNum.value = money.budget;
         money.totalbudget = (money.budget - money.expenseprice);
 
         let row = document.createElement('row');
@@ -52,24 +60,10 @@ function CreateExpense() {
         h4.id = 'expenseNameAndPrice';
         h4.textContent = `Expense: ${money.expensename} \n Price: $${money.expenseprice}`;
 
-        let deleteBtn = document.createElement('button');
-        deleteBtn.className = 'btn btn-danger';
-        deleteBtn.textContent = 'Delete';
-        deleteBtn.type = 'button';
-        deleteBtn.classList.add('expenseDisplay');
-        deleteBtn.addEventListener('click', function () {
-            let deletedValue = money.expenseprice; // Get the value of the deleted card
-            deleteBtn.parentNode.remove(); // Remove the row element that contains the button and h4
-            removeFromLocalStorage(money); // Remove the corresponding data from local storage
-        
-            let moneys = getLocalStoage();
-            let remainingBudget = moneys.reduce((acc, money) => acc + money.budget - money.expenseprice, 0);
-            remainingBudget += Number(deletedValue); // Add the value of the deleted card to the current remaining budget
-            placeHold.textContent = `Remaining budget: $${remainingBudget + money.totalbudget}`; // Update the remaining budget display
-        });
+        let hr = document.createElement('hr');
 
         row.appendChild(h4);
-        row.appendChild(deleteBtn);
+        row.appendChild(hr);
         whereExpense.append(row);
     })
 }
