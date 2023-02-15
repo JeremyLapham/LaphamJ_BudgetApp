@@ -8,7 +8,7 @@ const expensePrice = document.getElementById('expensePrice');
 const expenseName = document.getElementById('expenseName');
 const submitExpenseBtn = document.getElementById('submitExpenseBtn');
 const whereExpense = document.getElementById('whereExpense');
-
+const placeHold = document.getElementById('placeHold');
 
 submitBtn.addEventListener('click', function () {
     if (budgetNum.value == '') {
@@ -58,15 +58,15 @@ function CreateExpense() {
         deleteBtn.type = 'button';
         deleteBtn.classList.add('expenseDisplay');
         deleteBtn.addEventListener('click', function () {
-            deleteBtn.remove();
-            h4.remove();
-            //i know this is the issue with why it adds all of them back but i cant figure out how to fix it 
-            money.totalbudget += Number(money.expenseprice);
-
-            placeHold.textContent = `Remaining budget: $${money.totalbudget}`;
-            removeFromLocalStorage(money);
+            let deletedValue = money.expenseprice; // Get the value of the deleted card
+            deleteBtn.parentNode.remove(); // Remove the row element that contains the button and h4
+            removeFromLocalStorage(money); // Remove the corresponding data from local storage
+        
+            let moneys = getLocalStoage();
+            let remainingBudget = moneys.reduce((acc, money) => acc + money.budget - money.expenseprice, 0);
+            remainingBudget += Number(deletedValue); // Add the value of the deleted card to the current remaining budget
+            placeHold.textContent = `Remaining budget: $${remainingBudget + money.totalbudget}`; // Update the remaining budget display
         });
-        placeHold.textContent = `Remaining budget: $${money.totalbudget}`;
 
         row.appendChild(h4);
         row.appendChild(deleteBtn);
